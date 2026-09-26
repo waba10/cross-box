@@ -6,12 +6,16 @@
 body {
     background-color: #624977;
     align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
 
 }
 
 
 .container {
-    height: 60vh;
+    height: 70vh;
+    width: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,5 +34,9 @@ body {
 .box {
     height: 18vmin;
     width: 18vmin;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+
 
 }
