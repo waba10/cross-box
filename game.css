@@ -40,3 +40,13 @@ body {
 
 
 }
+
+#reset {
+    padding: 1rem;
+    font-size: 1.5rem;
+    background-color: black;
+    color: white;
+    border-radius: 1rem;
+    border: none;
+
+}
