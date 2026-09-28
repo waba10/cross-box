@@ -4,33 +4,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cross box</title>
+    <meta name="description" content="Cross Box - A modern, sleek, and animated Tic-Tac-Toe game with 2-Player and AI modes, sound effects, and celebratory animations.">
+    <title>Cross Box | Ultimate Tic-Tac-Toe</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
 </head>
-<link rel="stylesheet" href="game.css">
 
 <body>
-    <div class="msg-container">
-        <p id="msg">Winner</p>
-    </div>
-    <main>
-        <h1> Cross box </h1>
-        <div class="container">
-            <div class="gameBoard">
-                <button class="box"> </button>
-                <button class="box"> </button>
-                <button class="box"> </button>
-                <button class="box"> </button>
-                <button class="box"> </button>
-                <button class="box"> </button>
-                <button class="box"> </button>
-                <button class="box"> </button>
-                <button class="box"> </button>
+    <!-- Background Ambient Glow Orbs -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- Canvas for Win Confetti -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Winner / Game Over Modal -->
+    <div class="modal-overlay hide" id="modal-overlay">
+        <div class="modal-card">
+            <div class="trophy-icon" id="modal-icon">🏆</div>
+            <h2 id="modal-title">Victory!</h2>
+            <p id="msg">Player O Won The Match!</p>
+            <div class="modal-buttons">
+                <button class="action-btn primary-btn" id="modal-play-again-btn">
+                    <span>Play Next Round</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                </button>
             </div>
         </div>
+    </div>
 
-        <button class="reset">New Game</button>
+    <!-- Main Game App -->
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="logo-area">
+                    <span class="logo-badge">PRO</span>
+                    <h1>CROSS<span>BOX</span></h1>
+                </div>
+                <div class="header-controls">
+                    <button class="icon-btn" id="sound-btn" title="Toggle Sound (Mute/Unmute)" aria-label="Toggle Sound">
+                        <span id="sound-icon">🔊</span>
+                    </button>
+                    <button class="icon-btn" id="reset-score-btn" title="Reset All Scores" aria-label="Reset Scores">
+                        <span>↺</span>
+                    </button>
+                </div>
+            </div>
 
-    </main>
+            <!-- Mode Selector Switch -->
+            <div class="mode-selector">
+                <button class="mode-tab active" id="mode-pvp" data-mode="pvp">
+                    <span class="tab-icon">👥</span>
+                    <span>2 Players</span>
+                </button>
+                <button class="mode-tab" id="mode-ai" data-mode="ai">
+                    <span class="tab-icon">🤖</span>
+                    <span>vs Computer</span>
+                </button>
+            </div>
+
+            <!-- Turn Status Indicator -->
+            <div class="turn-indicator-card" id="turn-card">
+                <div class="turn-avatar" id="turn-avatar">O</div>
+                <div class="turn-info">
+                    <span class="turn-label">Current Turn</span>
+                    <span class="turn-player" id="turn-player-text">Player O</span>
+                </div>
+                <div class="turn-pulse-dot"></div>
+            </div>
+        </header>
+
+        <main class="game-main">
+            <!-- Scoreboard -->
+            <div class="scoreboard">
+                <div class="score-card player-o-card active-card" id="score-card-o">
+                    <div class="score-tag">PLAYER O</div>
+                    <div class="score-symbol">O</div>
+                    <div class="score-value" id="score-o">0</div>
+                    <div class="score-subtitle">Wins</div>
+                </div>
+
+                <div class="score-card tie-card" id="score-card-tie">
+                    <div class="score-tag">TIES</div>
+                    <div class="score-symbol">-</div>
+                    <div class="score-value" id="score-ties">0</div>
+                    <div class="score-subtitle">Draws</div>
+                </div>
+
+                <div class="score-card player-x-card" id="score-card-x">
+                    <div class="score-tag" id="player-x-label">PLAYER X</div>
+                    <div class="score-symbol">X</div>
+                    <div class="score-value" id="score-x">0</div>
+                    <div class="score-subtitle">Wins</div>
+                </div>
+            </div>
+
+            <!-- The 3x3 Game Board -->
+            <div class="container">
+                <div class="gameBoard" id="board" role="grid" aria-label="Tic Tac Toe Board">
+                    <button class="box" id="box-0" data-index="0" aria-label="Cell 1"></button>
+                    <button class="box" id="box-1" data-index="1" aria-label="Cell 2"></button>
+                    <button class="box" id="box-2" data-index="2" aria-label="Cell 3"></button>
+                    <button class="box" id="box-3" data-index="3" aria-label="Cell 4"></button>
+                    <button class="box" id="box-4" data-index="4" aria-label="Cell 5"></button>
+                    <button class="box" id="box-5" data-index="5" aria-label="Cell 6"></button>
+                    <button class="box" id="box-6" data-index="6" aria-label="Cell 7"></button>
+                    <button class="box" id="box-7" data-index="7" aria-label="Cell 8"></button>
+                    <button class="box" id="box-8" data-index="8" aria-label="Cell 9"></button>
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="controls-area">
+                <button class="action-btn secondary-btn" id="reset" title="Restart current round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    <span>Restart Round</span>
+                </button>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>Made with ❤️ • Cross Box Game</p>
+        </footer>
+    </div>
+
     <script src="game.js"></script>
 </body>
 
